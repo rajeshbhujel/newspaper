@@ -43,3 +43,48 @@ class Post(TimeStampModel):
     def __str__(self):
         return self.title
 
+
+class UserProfile(TimeStampModel):
+    user = models.OneToOneField("auth.user", on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="user_images/%Y/%m/%d", blank=False)
+    address = models.CharField(max_length=200)
+    biography = models.TextField()
+
+
+    def __str__(self):
+        return self.user.username
+    
+
+class Comment(TimeStampModel):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    comment = models.TextField()
+    name = models.CharField(max_length=50)
+    email = models.EmailField()
+
+
+    def __str__(self):
+        return f"{self.email} | {self.comment[:70]}"
+
+
+class Contact(TimeStampModel):
+    message = models.TextField()  
+    name = models.CharField(max_length=50)
+    email = models.EmailField()
+    subject = models.CharField(max_length=255)  
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ["created_at"]
+
+
+class Newsletter(TimeStampModel):
+    email = models.EmailField(unique=True)
+    def __str__(self):
+        return self.email
+    
+
+
+
+
